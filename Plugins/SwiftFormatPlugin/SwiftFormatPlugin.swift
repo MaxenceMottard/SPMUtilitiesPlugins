@@ -14,9 +14,16 @@ struct SwiftFormatPlugin: CommandPlugin {
         let tool = try context.tool(named: "swiftformat")
         let toolURL = URL(fileURLWithPath: tool.path.string)
 
+        var args = [context.pluginWorkDirectory.string] + arguments
+
+        while let targetIndex = args.firstIndex(of: "--target") {
+            args.remove(at: targetIndex)
+            args.remove(at: targetIndex)
+        }
+
         let process = Process()
         process.executableURL = toolURL
-        process.arguments = [context.package.directory.string]
+        process.arguments = args
 
         try process.run()
         process.waitUntilExit()
@@ -31,9 +38,16 @@ struct SwiftFormatPlugin: CommandPlugin {
             let tool = try context.tool(named: "swiftformat")
             let toolURL = URL(fileURLWithPath: tool.path.string)
 
+            var args = [context.xcodeProject.directory.string] + arguments
+
+            while let targetIndex = args.firstIndex(of: "--target") {
+                args.remove(at: targetIndex)
+                args.remove(at: targetIndex)
+            }
+
             let process = Process()
             process.executableURL = toolURL
-            process.arguments = [context.xcodeProject.directory.string]
+            process.arguments = args
 
             try process.run()
             process.waitUntilExit()
