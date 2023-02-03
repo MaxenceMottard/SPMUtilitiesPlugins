@@ -8,6 +8,7 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .plugin(name: "SwiftLintPlugin", targets: ["SwiftLintPlugin"]),
+        .plugin(name: "SwiftlintCommandPlugin", targets: ["SwiftlintCommandPlugin"]),
         .plugin(name: "SwiftFormatPlugin", targets: ["SwiftFormatPlugin"]),
     ],
     dependencies: [
@@ -40,6 +41,11 @@ let package = Package(
         .plugin(
             name: "SwiftLintPlugin",
             capability: .buildTool(),
+            dependencies: ["SwiftLintBinary"]
+        ),
+        .plugin(
+            name: "SwiftlintCommandPlugin",
+            capability: .command(intent: .custom(verb: "swiftlint", description: "Lint files with SwiftFormat")),
             dependencies: ["SwiftLintBinary"]
         ),
     ]
