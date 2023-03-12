@@ -14,16 +14,20 @@ struct SwiftLintPlugin: BuildToolPlugin {
         context: PackagePlugin.PluginContext,
         target: PackagePlugin.Target
     ) async throws -> [PackagePlugin.Command] {
-        print("BuildToolPlugin")
-        print(context.pluginWorkDirectory)
+        var args = ["lint"]
+
+        if ProcessInfo.processInfo.environment["CI"] == "TRUE" {
+            args.append("--no-cache")
+        } else {
+            args.append("--cache-path")
+            args.append("\(context.pluginWorkDirectory)")
+        }
+
         return [
             .buildCommand(
                 displayName: "SwiftLint",
                 executable: try context.tool(named: "swiftlint").path,
-                arguments: [
-                    "lint",
-                    "--cache-path", "\(context.pluginWorkDirectory)",
-                ]
+                arguments: args
             ),
         ]
     }

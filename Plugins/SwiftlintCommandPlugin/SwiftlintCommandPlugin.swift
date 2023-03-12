@@ -20,6 +20,8 @@ struct SwiftlintCommandPlugin: CommandPlugin {
             args.remove(at: targetIndex)
         }
 
+        args.append("--no-cache")
+
         let process = Process()
         process.executableURL = toolURL
         process.arguments = args
